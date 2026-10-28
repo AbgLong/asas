@@ -671,11 +671,20 @@ setInterval(() => {
 <script>
 window.onload = () => {
 
-    setTimeout(() => {
+    const cards = document.querySelectorAll('.card');
 
-        document.querySelector('.card').click();
+    let currentCard = 0;
 
-    }, 1000);
+    // Start on Automation
+    cards[0].click();
+
+    setInterval(() => {
+
+        currentCard = (currentCard + 1) % cards.length;
+
+        cards[currentCard].click();
+
+    }, 5000); // 5 minutes
 
 };
 </script>
