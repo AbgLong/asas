@@ -15,7 +15,7 @@
 *{
     box-sizing:border-box;
 }
-html
+html,
 body{
     margin:0;
     background:#102f76;
@@ -646,28 +646,6 @@ card.classList.add('active');
 }
 </script>
 
-<script>
-
-const cards = document.querySelectorAll('.card');
-
-let currentCard = 0;
-
-// Auto-select first card when dashboard loads
-cards[0].click();
-
-setInterval(() => {
-
-    currentCard++;
-
-    if(currentCard >= cards.length){
-        currentCard = 0;
-    }
-
-    cards[currentCard].click();
-
-}, 300000); // 300,000 ms = 5 minutes
-
-</script>
 <script>
 window.onload = () => {
 
