@@ -287,11 +287,9 @@ body{
 Saving per Year
 
 
-<span class="actual">RM 1,017,356</span>
-
+<span class="actual" id="totalSaving">Loading...</span>
 /
-
-<span class="target">RM 3,170,000</span>
+<span class="target" id="totalTarget">Loading...</span>
 </div>
 
 </div>
@@ -445,6 +443,14 @@ fetch("Dashboard.csv")
 .then(csv => {employeeRows = csv.split('\n');
 
     const rows = csv.split('\n');
+    // Row 47 = index 46
+const totalCols = rows[46].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+
+document.getElementById("totalSaving").textContent =
+    totalCols[2].replace(/"/g,'');
+
+document.getElementById("totalTarget").textContent =
+    totalCols[1].replace(/"/g,'');
 
     rows.forEach(row => {
 
