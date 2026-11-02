@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <meta http-equiv="refresh" content="3600">
 
 <title>Engineering Kaizen Dashboard</title>
 
-
-
 <style>
-
-    
-
+  
 *{
     box-sizing:border-box;
 }
@@ -28,9 +25,9 @@ body{
     
 .header{
     display:flex;
-    justify-content:space-between;
     align-items:center;
-    padding:0px 40px;
+    justify-content:space-between;
+    padding:10px 40px;
 }
 
 .logo{
@@ -48,7 +45,9 @@ body{
 .target-box{
     font-size:35px;
     font-weight:600;
-
+    display:flex;
+    align-items:center;
+    gap:15px;
 }
 
 .target-box{
@@ -276,7 +275,7 @@ body{
     height: 50px;
     cursor:pointer;
     transition:0.3s;
-    font-size: 20px;
+    font-size: 30px;
     display:flex;
     align-items:center;      /* Vertical center */
     justify-content:center;  /* Horizontal center */
@@ -293,6 +292,49 @@ body{
 .info-card:hover{
     transform:translateY(-3px);
 }
+@media (max-width: 768px){
+
+    .container{
+        grid-template-columns:1fr;
+        padding:10px;
+    }
+
+    .sidebar{
+        width:100%;
+        min-height:auto;
+    }
+
+    .header{
+        flex-direction:column;
+        align-items:center;
+        text-align:center;
+    }
+
+    .target-box{
+        margin-top:15px;
+    }
+
+    .target-box .actual,
+    .target-box .target{
+        font-size:40px;
+    }
+
+    .card-area{
+        grid-template-columns:1fr;
+    }
+
+    .info-card{
+        width:100%;
+    }
+
+    .detail-panel{
+        overflow-x:auto;
+    }
+
+    .detail-panel table{
+        min-width:900px;
+    }
+}
 
 </style>
 </head>
@@ -303,18 +345,16 @@ body{
 
 <div class="header">
 
-<div class="target-box">
+    <img src="https://sixsigmaonlinetraining.com.au/wp-content/uploads/2016/09/ESCATEC-logo1.jpg"
+         alt="Escatec Logo"
+         width="440">
 
-<img src="https://sixsigmaonlinetraining.com.au/wp-content/uploads/2016/09/ESCATEC-logo1.jpg" alt="Escatec Logo" width="440" style="margin-right:120px;">
-
-
-Saving per Year
-
-
-<span class="actual" id="totalSaving">Loading...</span>
-/
-<span class="target" id="totalTarget">Loading...</span>
-</div>
+    <div class="target-box">
+        Saving per Year
+        <span class="actual" id="totalSaving">Loading...</span>
+        /
+        <span class="target" id="totalTarget">Loading...</span>
+    </div>
 
 </div>
 
@@ -477,7 +517,7 @@ fetch("Dashboard.csv")
 
     const rows = csv.split('\n');
     // Row 47 = index 46
-const totalCols = rows[46].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+const totalCols = rows[47].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
 
 document.getElementById("totalSaving").textContent =
     totalCols[2].replace(/"/g,'');
@@ -694,6 +734,8 @@ card.classList.add('active');
     card.classList.add('active');
 }
 window.onload = () => {
+
+document.querySelector('.info-card').click();
 
     const cards = document.querySelectorAll('.card');
 
