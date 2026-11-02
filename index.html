@@ -267,7 +267,6 @@ body{
 }
 .card.active{
     background:#4CAF50; /* Green */
-    text-emphasis-color: ;
     border:3px solid white;
 }
 .info-card{
@@ -313,9 +312,7 @@ Saving per Year
 
 
 <span class="actual" id="totalSaving">Loading...</span>
-
 /
-
 <span class="target" id="totalTarget">Loading...</span>
 </div>
 
@@ -324,16 +321,19 @@ Saving per Year
 </div>
 
 <div class="container">
+
 <div class="sidebar">
 
-    <div class="dashboard-title">
+
+
+
+<div class="dashboard-title">
 
 Engineering Kaizen Progress <br>
 
 <span>DASHBOARD</span>
 
 </div>
-
 <div class="info-card"
      onclick="selectInfoCard(this)">
     <h3>Saving</h3>
@@ -345,8 +345,6 @@ Engineering Kaizen Progress <br>
     <h3>Participant</h3>
     <div class="value" id="sidebarParticipant"></div>
 </div>
-
-
 
 <div class="info-box">
 
@@ -475,18 +473,17 @@ let employeeRows = [];
 <script>
 fetch("Dashboard.csv")
 .then(response => response.text())
-.then(csv => {const rows = csv.split('\n');
-
-// Row 47 = index 46
-const totalRow = rows[46];
-
-const cols = totalRow.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
-
-document.getElementById("totalSaving").textContent =
-    cols[4].replace(/"/g,''); document.getElementById("totalTarget").textContent =
-    cols[5].replace(/"/g,''); employeeRows = csv.split('\n');
+.then(csv => {employeeRows = csv.split('\n');
 
     const rows = csv.split('\n');
+    // Row 47 = index 46
+const totalCols = rows[46].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+
+document.getElementById("totalSaving").textContent =
+    totalCols[2].replace(/"/g,'');
+
+document.getElementById("totalTarget").textContent =
+    totalCols[1].replace(/"/g,'');
 
     rows.forEach(row => {
 
@@ -650,7 +647,6 @@ document.getElementById("totalSaving").textContent =
 </script>
 <script>
 
-
 function showDepartment(department,card){
 document.querySelectorAll('.card').forEach(c => {
     c.classList.remove('active');
@@ -690,7 +686,6 @@ card.classList.add('active');
 </script>
 
 <script>
-
     function selectInfoCard(card){
     document.querySelectorAll('.info-card').forEach(c => {
         c.classList.remove('active');
@@ -699,8 +694,6 @@ card.classList.add('active');
     card.classList.add('active');
 }
 window.onload = () => {
-
-    document.querySelector('.info-card').click();   
 
     const cards = document.querySelectorAll('.card');
 
@@ -719,7 +712,6 @@ window.onload = () => {
 
 };
 </script>
-
 
 </body>
 </html>
