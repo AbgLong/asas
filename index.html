@@ -484,7 +484,7 @@ fetch("Dashboard.csv")
 
     const rows = csv.split('\n');
     // Row 47 = index 46
-const totalCols = rows[47].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+const totalCols = rows[46].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
 
 document.getElementById("totalSaving").textContent =
     totalCols[2].replace(/"/g,'');
