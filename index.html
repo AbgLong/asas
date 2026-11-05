@@ -143,24 +143,41 @@ body{
 
 .card h2{
     margin:0 0 20px 0;
-    font-size:22px;
+    font-size:20px;
     font-weight:500;
 }
 
 .actual-saving{
-    font-size:20px;
+    font-size:25px;
     font-weight:bold;
 }
 
 .target-saving{
-    font-size:20px;
+    font-size:25px;
     color:#9ffeff;
+}
+.card.participant-mode .actual-saving{
+    position:absolute;
+    left:38%;
+    top:55px;
+    transform:translateX(-50%);
+    text-align:center;
+    width:100px;
+}
+
+.card.participant-mode .target-saving{
+    position:absolute;
+    left:38%;
+    top:95px;
+    transform:translateX(-50%);
+    text-align:center;
+    width:100px;
 }
 
 .percent{
     position:absolute;
     right:30px;
-    bottom:40px;
+    bottom:25px;
 
     width:70px;
     height:70px;
@@ -342,13 +359,13 @@ Engineering Kaizen Progress <br>
 
 </div>
 <div class="info-card"
-     onclick="selectInfoCard(this)">
+     onclick="switchMode('saving',this)">
     <h3>Saving</h3>
-    <div class="value" id="sidebarSaving"> </div>
+    <div class="value" id="sidebarSaving"></div>
 </div>
 
 <div class="info-card"
-     onclick="selectInfoCard(this)">
+     onclick="switchMode('participant',this)">
     <h3>Participant</h3>
     <div class="value" id="sidebarParticipant"></div>
 </div>
@@ -472,8 +489,9 @@ onclick="showDepartment('Failure Analysis',this)">
 </div>
 
 <script>
-
+let displayMode = "saving";   // saving or participant
 let employeeRows = [];
+let departmentData = {};
 
 </script>
 
@@ -481,6 +499,7 @@ let employeeRows = [];
 fetch("Dashboard.csv")
 .then(response => response.text())
 .then(csv => {employeeRows = csv.split('\n');
+updateCards();
 
     const rows = csv.split('\n');
     // Row 47 = index 46
@@ -499,8 +518,19 @@ document.getElementById("totalTarget").textContent =
         if (!cols) return;
 
         const dept = cols[0].trim();
+        const participate = cols[5]?.replace(/"/g,'') || "0";
+        const participateKPI = cols[6]?.replace(/"/g,'') || "0";
+
         const saving = cols[1]?.replace(/"/g,'');
         const target = cols[2]?.replace(/"/g,'');
+
+        departmentData[dept] = {
+        saving,
+        target,
+        participate,
+        participateKPI
+};
+        
         const savingValue =
          parseFloat(saving.replace(/[RM,]/g,'')) || 0;
 
@@ -693,13 +723,29 @@ card.classList.add('active');
 </script>
 
 <script>
-    function selectInfoCard(card){
+function switchMode(mode, card){
+
+    displayMode = mode;
+
     document.querySelectorAll('.info-card').forEach(c => {
         c.classList.remove('active');
     });
 
     card.classList.add('active');
+
+    document.querySelectorAll('.card').forEach(c => {
+
+        if(mode === "participant"){
+            c.classList.add("participant-mode");
+        }else{
+            c.classList.remove("participant-mode");
+        }
+
+    });
+
+    updateCards();
 }
+
 window.onload = () => {
 
 document.querySelector('.info-card').click();
@@ -720,6 +766,46 @@ document.querySelector('.info-card').click();
     }, 60000); // 5 minutes
 
 };
+function updateCards(){
+
+    const mapping = [
+        {dept:"Automation", value:"automationSaving", target:"automationTarget"},
+        {dept:"Component", value:"componentSaving", target:"componentTarget"},
+        {dept:"Failure Analysis", value:"faSaving", target:"faTarget"},
+        {dept:"Process", value:"processSaving", target:"processTarget"},
+        {dept:"Product", value:"productSaving", target:"productTarget"},
+        {dept:"System & Documentation", value:"systemSaving", target:"systemTarget"},
+        {dept:"Test", value:"testSaving", target:"testTarget"},
+        {dept:"Test Development", value:"testDevSaving", target:"testDevTarget"}
+    ];
+
+    mapping.forEach(item => {
+
+        const data = departmentData[item.dept];
+
+        if(!data) return;
+
+        if(displayMode === "saving"){
+
+            document.getElementById(item.value).textContent =
+                data.saving;
+
+            document.getElementById(item.target).textContent =
+                data.target;
+
+        } else {
+
+            document.getElementById(item.value).textContent =
+                data.participate;
+
+            document.getElementById(item.target).textContent =
+                data.participateKPI;
+
+        }
+
+    });
+
+}
 </script>
 
 </body>
