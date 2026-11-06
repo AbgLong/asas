@@ -319,7 +319,11 @@ body{
     }
 
 }
-
+.kpi-complete td{
+    background:#4CAF50;
+    color:white !important;
+    font-weight:normal;
+}
 </style>
 </head>
 
@@ -705,16 +709,18 @@ card.classList.add('active');
         // Employee rows
         if(cols[0].trim() === department){
 
-            html += `
-            <tr>
-                <td>${cols[1]}</td>
-                <td>${cols[2]}</td>
-                <td>${cols[3]}</td>
-                <td>${cols[5].replace(/"/g,'')}</td>
-                <td class="participate">${cols[7]}</td>
-                <td>${cols[8]}</td>
-            </tr>`;
-        }
+    const kpiCompleted = cols[8].trim().toLowerCase();
+
+    html += `
+    <tr class="${kpiCompleted === 'yes' ? 'kpi-complete' : ''}">
+        <td>${cols[1]}</td>
+        <td>${cols[2]}</td>
+        <td>${cols[3]}</td>
+        <td>${cols[5].replace(/"/g,'')}</td>
+        <td class="participate">${cols[7]}</td>
+        <td>${cols[8]}</td>
+    </tr>`;
+}
 
     });
 
